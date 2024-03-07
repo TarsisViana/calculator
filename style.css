@@ -1,0 +1,24 @@
+body{
+  margin: 4rem;
+}
+.calculator{
+  width: 400px;
+  margin: auto;
+}
+
+.display{
+  text-align: end;
+}
+.buttons{
+  display: flex;
+  flex-wrap: wrap-reverse;
+}
+
+.button{
+  width: 98px;
+  height: 50px;
+  margin: 1px;
+} 
+.button.zero{
+  width: 198px;
+}
