@@ -2,6 +2,7 @@ let num1 = 0;
 let num2 = 0;
 let operator;
 let result = 0;
+let tempNumber = '';
 
 const display = document.querySelector('.display');
 const numberBtn = document.querySelectorAll('.number');
@@ -27,7 +28,7 @@ numberBtn.forEach((btn)=> {
   btn.addEventListener('click',() => {
     if (display.textContent == 0) display.textContent = '';
     display.textContent += btn.textContent;
-    
+    getInput(btn.textContent);
   });
 });
 
@@ -36,6 +37,8 @@ operatorBtn.forEach((btn) => {
   btn.addEventListener('click',() => {
     if (display.textContent == 0) return;
     display.textContent += btn.textContent;
+    operator = btn;
+    tempNumber = '';                          //clears variable to use for num2
   });
 });
 
@@ -45,6 +48,8 @@ eraseBtn.forEach((btn) => {
     if (display.textContent == 0) return;
     if (btn.id == 'clear') {
       display.textContent = 0;
+      num1 = num2 = result = 0;
+      tempNumber = '';
       return;
     }
     if(btn.id == 'del'){
@@ -60,3 +65,21 @@ operateBtn.addEventListener('click',() => {
   result = operate(num1, num2, operator);
   display.textContent = result; 
 });
+
+
+function getInput(number){
+  if (!/[\+\-*/]/.test(display.textContent)){
+    tempNumber += number;
+    num1 = parseInt(tempNumber);
+    console.log('num1 ' + num1);
+
+  } else if (/[\+\-*/]/.test(display.textContent)){
+    console.log(number)
+    tempNumber += number;
+    num2 = parseInt(tempNumber);
+    console.log('num2 '+ num2);
+  }
+  
+};
+
+// !display.textContent.includes(/[\+\-*/]/g)
