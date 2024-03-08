@@ -8,7 +8,7 @@ const display = document.querySelector('.display');
 const numberBtn = document.querySelectorAll('.number');
 const operatorBtn = document.querySelectorAll('.operator');
 const eraseBtn = document.querySelectorAll('.erase');
-const operateBtn = document.querySelector('#operate');
+const equalBtn = document.querySelector('#equal');
 
 //object containing all the operation functions
 let operations = {
@@ -36,11 +36,20 @@ numberBtn.forEach((btn)=> {
 operatorBtn.forEach((btn) => {
   btn.addEventListener('click',() => {
     if (display.textContent == 0) return;
+    if (changeOperator(display.textContent)){
+      display.textContent = display.textContent.slice(0,-1);
+    }
     display.textContent += btn.textContent;
     operator = btn;
-    tempNumber = '';                          //clears variable to use for num2
+    //clear tempNember for getInput fuction
+    tempNumber = '';                          
+    
   });
 });
+
+function changeOperator(string) {
+  return display.textContent.slice(-1).match(/[\+\-*/]/);
+}
 
 //links the erase buttons to the needed functions
 eraseBtn.forEach((btn) => {
@@ -61,20 +70,21 @@ eraseBtn.forEach((btn) => {
 });
 
 //liks the equal buttons to start the operations
-operateBtn.addEventListener('click',() => {
+equalBtn.addEventListener('click',() => {
   result = operate(num1, num2, operator);
   display.textContent = result; 
+  num1 = result;
 });
 
 
 function getInput(number){
+
   if (!/[\+\-*/]/.test(display.textContent)){
     tempNumber += number;
     num1 = parseInt(tempNumber);
     console.log('num1 ' + num1);
 
   } else if (/[\+\-*/]/.test(display.textContent)){
-    console.log(number)
     tempNumber += number;
     num2 = parseInt(tempNumber);
     console.log('num2 '+ num2);
