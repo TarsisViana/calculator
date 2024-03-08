@@ -14,11 +14,11 @@ body{
   flex-wrap: wrap-reverse;
 }
 
-.button{
+button{
   width: 98px;
   height: 50px;
   margin: 1px;
 } 
-.button.zero{
+.zero{
   width: 198px;
 }
