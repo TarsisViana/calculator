@@ -22,3 +22,6 @@ button{
 .zero{
   width: 198px;
 }
+.pressed{
+  background-color: aquamarine;
+}
