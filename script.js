@@ -3,6 +3,7 @@ let num2 = 0;
 let operator;
 let result = 0;
 let tempNumber = '';
+let memory = '';
 
 const display = document.querySelector('.display');
 const numberBtn = document.querySelectorAll('.number');
@@ -18,38 +19,81 @@ let operations = {
   add: (num1,num2) => num1 + num2,  
 };
 
-//function that calls the corresponding operation from the object id
-function operate(num1,num2,operator){
+//function that reads the string for the numbers and calls the opereration
+function operate(text,operator){
+  num1 = parseInt(text.slice(0, text.search(/[\+\-*/]/)));
+  num2 = parseInt(text.slice(parseInt(text.search(/[\+\-*/]/))+1));
+  if (isNaN(num1) || isNaN(num2)) return text;
   return operations[operator.id](num1,num2);
 };    
 
-//links the numbers buttons to the needed functions
+//links the numbers buttons and updates display
 numberBtn.forEach((btn)=> {
   btn.addEventListener('click',() => {
-    if (display.textContent == 0) display.textContent = '';
-    display.textContent += btn.textContent;
-    getInput(btn.textContent);
+    updateDisplay(display.textContent,btn);
   });
 });
 
-//links the operators numbers to the needed functions
+function updateDisplay(text,btn) {
+  if(btn !== undefined){
+    if(btn.className.includes('number')){
+      if (text == 0) display.textContent = '';
+      display.textContent += btn.textContent;
+
+    }else if(btn.className.includes('operator')){
+      if (display.textContent == 0) return;
+      changeOperator(display.textContent);
+      display.textContent += btn.textContent;
+    }
+  }else{
+    display.textContent = text;
+  }
+};
+
+//links the operators buttons
+//check the display string if its a multiple operation
+//if true do the first operation and num1 receives the
+//result for the next operation. (exercise demand)
 operatorBtn.forEach((btn) => {
   btn.addEventListener('click',() => {
-    if (display.textContent == 0) return;
-    if (changeOperator(display.textContent)){
-      display.textContent = display.textContent.slice(0,-1);
-    }
-    display.textContent += btn.textContent;
-    operator = btn;
-    //clear tempNember for getInput fuction
-    tempNumber = '';                          
-    
+    checkMultipleOperations(display.textContent,btn,operator)
+    updateDisplay(display.textContent,btn,operator);
+    operator = btn;                           
   });
 });
 
-function changeOperator(string) {
-  return display.textContent.slice(-1).match(/[\+\-*/]/);
+function checkMultipleOperations(displayText,btn,oldOperator){
+  
+  if(displayText.match(/[\+\-*/]/)){
+    let length = parseInt(displayText.length)-1;
+    let opPosition = displayText.search(/[\+\-*/]/);
+    if(opPosition != length && opPosition != '-1'){
+      tempNumber = operate(display.textContent,oldOperator);
+      num1 = tempNumber;
+      updateDisplay(num1);
+    }
+  }
+  
 }
+
+
+//allows user to change the operator if a mistake was made
+//if the last input was a operator than just click another 
+//and it changes
+function changeOperator(string) {
+  if(string.slice(-1).match(/[\+\-*/]/)){
+    display.textContent = string.slice(0,-1);
+  }
+}
+
+
+//liks the equal button to start the operations
+equalBtn.addEventListener('click',() => {
+  result = operate(display.textContent, operator);
+  display.textContent = result; 
+});
+
+
 
 //links the erase buttons to the needed functions
 eraseBtn.forEach((btn) => {
@@ -69,27 +113,9 @@ eraseBtn.forEach((btn) => {
   });
 });
 
-//liks the equal buttons to start the operations
-equalBtn.addEventListener('click',() => {
-  result = operate(num1, num2, operator);
-  display.textContent = result; 
-  num1 = result;
-});
 
 
-function getInput(number){
 
-  if (!/[\+\-*/]/.test(display.textContent)){
-    tempNumber += number;
-    num1 = parseInt(tempNumber);
-    console.log('num1 ' + num1);
 
-  } else if (/[\+\-*/]/.test(display.textContent)){
-    tempNumber += number;
-    num2 = parseInt(tempNumber);
-    console.log('num2 '+ num2);
-  }
-  
-};
 
-// !display.textContent.includes(/[\+\-*/]/g)
+
