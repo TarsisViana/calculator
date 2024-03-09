@@ -4,6 +4,7 @@ let operator;
 let result = 0;
 let tempNumber = '';
 let memory = '';
+let equalTest = false;
 
 const display = document.querySelector('.display');
 const numberBtn = document.querySelectorAll('.number');
@@ -21,9 +22,11 @@ let operations = {
 
 //function that reads the string for the numbers and calls the opereration
 function operate(text,operator){
+  if(text.search(/[\+\-*/]/) == -1) return text;
   num1 = parseInt(text.slice(0, text.search(/[\+\-*/]/)));
   num2 = parseInt(text.slice(parseInt(text.search(/[\+\-*/]/))+1));
   if (isNaN(num1) || isNaN(num2)) return text;
+  equalTest = true;                       
   return operations[operator.id](num1,num2);
 };    
 
@@ -38,6 +41,7 @@ function updateDisplay(text,btn) {
   if(btn !== undefined){
     if(btn.className.includes('number')){
       if (text == 0) display.textContent = '';
+      if (equalTest) display.textContent = '';  //resets if number pressed after =
       display.textContent += btn.textContent;
 
     }else if(btn.className.includes('operator')){
@@ -48,6 +52,7 @@ function updateDisplay(text,btn) {
   }else{
     display.textContent = text;
   }
+  equalTest = false;
 };
 
 //links the operators buttons
