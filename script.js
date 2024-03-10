@@ -11,6 +11,7 @@ const numberBtn = document.querySelectorAll('.number');
 const operatorBtn = document.querySelectorAll('.operator');
 const eraseBtn = document.querySelectorAll('.erase');
 const equalBtn = document.querySelector('#equal');
+const negBtn = document.querySelector('.negative');
 
 //object containing all the operation functions
 const operations = {
@@ -38,6 +39,7 @@ numberBtn.forEach((btn)=> {
   btn.addEventListener('click',() => {
     updateDisplay(display.textContent,btn);
     input += btn.textContent;
+    console.log(input);
   });
 });
 
@@ -45,7 +47,10 @@ numberBtn.forEach((btn)=> {
 
 function updateDisplay(text,btn) {
   if(btn !== undefined){
-    if(btn.className.includes('number')){
+    if(btn.className.includes('negative')){
+      display.textContent = input;
+    }
+    else if(btn.className.includes('number')){
 
       //removes inicial 0 and resets display when new input is started
       if (input == '') display.textContent = '';
@@ -82,6 +87,7 @@ operatorBtn.forEach((btn) => {
     if(operator != undefined){
       getOperands(input);
       result = operate(num1,num2,operator);
+      num1 = result;
       updateDisplay(result);
       operator.classList.toggle('pressed');
     }
@@ -144,7 +150,16 @@ eraseBtn.forEach((btn) => {
 
 
 
-
+negBtn.addEventListener('click',() => {
+  if (input == ''|| input == '0') return;
+  if (Math.sign(parseInt(input)) == -1){
+    input = input.slice(1);
+    updateDisplay(display.textContent,negBtn);
+  }else{
+    input = '-' + input;
+    updateDisplay(display.textContent,negBtn);
+  }
+});
 
 
 
