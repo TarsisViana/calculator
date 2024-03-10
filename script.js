@@ -25,6 +25,8 @@ const operations = {
 
 
 function operate(num1, num2, operator){  
+  //first check if equal is pressed out of order, and prevent any
+  //calculations to be made that would go boom
   if (isNaN(num1) || isNaN(num2)) return display.textContent;
   if (operator == undefined) return display.textContent;                    
   return operations[operator.id](num1,num2);
@@ -44,19 +46,29 @@ numberBtn.forEach((btn)=> {
 function updateDisplay(text,btn) {
   if(btn !== undefined){
     if(btn.className.includes('number')){
-      if (text == 0) display.textContent = '';
-      if (equalTest) display.textContent = '';  //resets if number pressed after =
-      if (operator != undefined) display.textContent = '';
+
+      //removes inicial 0 and resets display when new input is started
       if (input == '') display.textContent = '';
+  
+      //resets if number pressed after =
+      if (equalTest) {
+        display.textContent = '';
+        equalTest = false;
+        input = ''; 
+      }
+      
+      //after first operator button is pressed reset display
+      if (operator != undefined && input == '') display.textContent = '';
+
       display.textContent += btn.textContent;
 
     }else if(btn.className.includes('operator')){
       if (display.textContent == 0) return;
-      changeOperator(display.textContent);
       display.textContent += btn.textContent;
     }
   }else{
     display.textContent = text;
+    console.log('here1');
   }
   equalTest = false;
 };
@@ -92,22 +104,18 @@ function getOperands(number){
 
 
 
-//allows user to change the operator if a mistake was made
-//if the last input was a operator than just click another 
-//and it changes
-function changeOperator(string) {
-  if(string.slice(-1).match(/[\+\-*/]/)){
-    display.textContent = string.slice(0,-1);
-  }
-}
-
-
 //liks the equal button to start the operations
 equalBtn.addEventListener('click',() => {
   getOperands(input);
   display.textContent = operate(num1, num2, operator);
-  num1 = parseInt(display.textContent);
-  console.log(num1, operator)
+  input = parseInt(display.textContent);
+  if(operator != undefined){
+    operator.classList.toggle('pressed');
+    operator = undefined;
+    num1 = num2 = null;
+  }   
+  console.log(num1, operator);
+  equalTest = true;
 });
 
 
@@ -115,15 +123,19 @@ equalBtn.addEventListener('click',() => {
 //links the erase buttons to the needed functions
 eraseBtn.forEach((btn) => {
   btn.addEventListener('click',() => {
-    if (display.textContent == 0) return;
     if (btn.id == 'clear') {
       display.textContent = 0;
-      num1 = num2 = result = operator = null;
+      num1 = num2 = result = null;
       input = '';
+      if(operator != undefined){
+        operator.classList.toggle('pressed');
+        operator = undefined;
+      }    
       return;
     }
     if(btn.id == 'del'){
       display.textContent = display.textContent.slice(0,-1);
+      input = display.textContent;
       if (display.textContent == '') display.textContent = 0;
       return;
     }

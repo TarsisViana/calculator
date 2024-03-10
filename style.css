@@ -8,6 +8,7 @@ body{
 
 .display{
   text-align: end;
+  font-size: 2rem;
 }
 .buttons{
   display: flex;
@@ -22,6 +23,9 @@ button{
 .zero{
   width: 198px;
 }
+.operator, #equal{
+  background-color: rgb(199, 199, 199);
+}
 .pressed{
-  background-color: aquamarine;
+  background-color: rgb(143, 143, 143);
 }
