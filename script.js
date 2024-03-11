@@ -12,6 +12,7 @@ const operatorBtn = document.querySelectorAll('.operator');
 const eraseBtn = document.querySelectorAll('.erase');
 const equalBtn = document.querySelector('#equal');
 const negBtn = document.querySelector('.negative');
+const dotBtn = document.querySelector('#dot');
 
 //object containing all the operation functions
 const operations = {
@@ -29,7 +30,11 @@ function operate(num1, num2, operator){
   //first check if equal is pressed out of order, and prevent any
   //calculations to be made that would go boom
   if (isNaN(num1) || isNaN(num2)) return display.textContent;
-  if (operator == undefined) return display.textContent;                    
+  if (operator == undefined) return display.textContent; 
+  if (operator.id == 'divide' && num2 == 0){
+    window.alert("You can't break me");
+    return 0;
+  }                   
   return operations[operator.id](num1,num2);
 };    
 
@@ -69,11 +74,18 @@ function updateDisplay(text,btn) {
 
     }else if(btn.className.includes('operator')){
       if (display.textContent == 0) return;
+      console.log('hello')
       display.textContent += btn.textContent;
+
+    }else if(btn.id.includes('dot')){
+      let number = parseFloat(display.textContent);
+      if(Number.isInteger(number)) {
+      display.textContent += '.'
+      input = display.textContent;
+  }
     }
   }else{
     display.textContent = text;
-    console.log('here1');
   }
   equalTest = false;
 };
@@ -86,7 +98,7 @@ operatorBtn.forEach((btn) => {
   btn.addEventListener('click',() => {
     if(operator != undefined){
       getOperands(input);
-      result = operate(num1,num2,operator);
+      result = Math.round(operate(num1, num2, operator)*100)/100;
       num1 = result;
       updateDisplay(result);
       operator.classList.toggle('pressed');
@@ -97,12 +109,13 @@ operatorBtn.forEach((btn) => {
   });
 });
 
+
 function getOperands(number){
   if (operator != undefined){
-    num2 = parseInt(number);
+    num2 = parseFloat(number);
     input = '';
   }else {
-    num1 = parseInt(number);
+    num1 = parseFloat(number);
     input = '';
   }
   console.log(num1,num2)
@@ -113,8 +126,8 @@ function getOperands(number){
 //liks the equal button to start the operations
 equalBtn.addEventListener('click',() => {
   getOperands(input);
-  display.textContent = operate(num1, num2, operator);
-  input = parseInt(display.textContent);
+  display.textContent = Math.round(operate(num1, num2, operator)*100)/100;
+  input = parseFloat(display.textContent);
   if(operator != undefined){
     operator.classList.toggle('pressed');
     operator = undefined;
@@ -149,10 +162,10 @@ eraseBtn.forEach((btn) => {
 });
 
 
-
+//toggles negative number only after number is inputted;
 negBtn.addEventListener('click',() => {
   if (input == ''|| input == '0') return;
-  if (Math.sign(parseInt(input)) == -1){
+  if (Math.sign(parseFloat(input)) == -1){
     input = input.slice(1);
     updateDisplay(display.textContent,negBtn);
   }else{
@@ -161,5 +174,6 @@ negBtn.addEventListener('click',() => {
   }
 });
 
-
-
+dotBtn.addEventListener('click',() => {
+  updateDisplay(display.textContent,dotBtn);
+});
