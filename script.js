@@ -42,9 +42,9 @@ function operate(num1, num2, operator){
 //links the numbers buttons, updates display, adds the input
 numberBtn.forEach((btn)=> {
   btn.addEventListener('click',() => {
+    if (input.length >= 15) return;
     updateDisplay(display.textContent,btn);
     input += btn.textContent;
-    console.log(input);
   });
 });
 
@@ -53,9 +53,13 @@ numberBtn.forEach((btn)=> {
 function updateDisplay(text,btn) {
   if(btn !== undefined){
     if(btn.className.includes('negative')){
-      display.textContent = input;
-    }
-    else if(btn.className.includes('number')){
+      display.textContent = input
+
+    }else if(btn.className.includes('zero') && display.textContent == '0') {
+      input = '';
+      return;
+
+    }else if(btn.className.includes('number')){
 
       //removes inicial 0 and resets display when new input is started
       if (input == '') display.textContent = '';
@@ -74,7 +78,6 @@ function updateDisplay(text,btn) {
 
     }else if(btn.className.includes('operator')){
       if (display.textContent == 0) return;
-      console.log('hello')
       display.textContent += btn.textContent;
 
     }else if(btn.id.includes('dot')){
@@ -84,7 +87,7 @@ function updateDisplay(text,btn) {
       input = display.textContent;
   }
     }
-  }else{
+  }else{ 
     display.textContent = text;
   }
   equalTest = false;
@@ -118,7 +121,6 @@ function getOperands(number){
     num1 = parseFloat(number);
     input = '';
   }
-  console.log(num1,num2)
 }
 
 
@@ -133,7 +135,6 @@ equalBtn.addEventListener('click',() => {
     operator = undefined;
     num1 = num2 = null;
   }   
-  console.log(num1, operator);
   equalTest = true;
 });
 
