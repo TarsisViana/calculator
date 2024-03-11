@@ -1,14 +1,23 @@
 body{
-  margin: 4rem;
+  margin: 2rem;
+  justify-content: center;
 }
 .calculator{
   width: 400px;
   margin: auto;
+  background-color: rgb(32, 32, 32);
+  padding: 1rem;
+  border-radius: 8px;
 }
 
 .display{
   text-align: end;
   font-size: 2rem;
+  background-color: rgb(66, 66, 66);
+  border-radius: 4px;
+  padding: 0 1rem;
+  color: aliceblue;
+  margin-bottom: 1.5rem;
 }
 .buttons{
   display: flex;
@@ -19,12 +28,14 @@ button{
   width: 98px;
   height: 50px;
   margin: 1px;
+  border-radius: 4px;
 } 
 .zero{
   width: 198px;
 }
 .operator, #equal{
   background-color: rgb(199, 199, 199);
+  
 }
 .pressed{
   background-color: rgb(143, 143, 143);
